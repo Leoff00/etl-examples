@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-import { User } from "./type";
+import type { User } from "./type";
 
 const pool = new Pool({
   user: "test_user",
@@ -37,7 +37,7 @@ async function fetchUsers() {
   }
 }
 
-async function transformAndUploadToS3(data: any) {
+async function uploadToS3(data: any) {
   try {
     const jsonData = JSON.stringify(data, null, 2);
     console.log(jsonData);
@@ -59,17 +59,19 @@ async function transformAndUploadToS3(data: any) {
 
 async function exportData() {
   console.log("Buscando usuários do banco de dados...");
-  const users = await fetchUsers();
+  const users: Array<User> = await fetchUsers();
 
-  if (users.length === 0) {
+  const moreThan18 = users.filter((user) => user.age > 18);
+
+  if (moreThan18.length === 0) {
     console.log("Nenhum usuário encontrado.");
     return;
   }
 
   console.log(
-    `Foram encontrados ${users.length} usuários. Enviando para o S3...`
+    `Foram encontrados ${moreThan18.length} usuários. Enviando para o S3...`
   );
-  await uploadToS3(users);
+  await uploadToS3(moreThan18);
 }
 
 exportData();
