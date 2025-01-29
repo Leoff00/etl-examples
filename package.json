@@ -1,0 +1,20 @@
+{
+  "name": "etl-ex",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "pop": "bun populate.ts",
+    "s3": "bun index.ts"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@types/pg": "^8.11.11"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.735.0",
+    "pg": "^8.13.1"
+  }
+}
